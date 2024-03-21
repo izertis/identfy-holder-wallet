@@ -1,0 +1,90 @@
+diff --git a/node_modules/@cef-ebsi/wallet-lib/dist/browser/EbsiWallet.js b/node_modules/@cef-ebsi/wallet-lib/dist/browser/EbsiWallet.js
+index 784f044..923fe2d 100644
+--- a/node_modules/@cef-ebsi/wallet-lib/dist/browser/EbsiWallet.js
++++ b/node_modules/@cef-ebsi/wallet-lib/dist/browser/EbsiWallet.js
+@@ -15,7 +15,6 @@ import { keccak256 } from "js-sha3";
+ import { ec as EC } from "elliptic";
+ import KeyEncoder from "key-encoder";
+ import { Buffer } from "buffer";
+-import { createJWT, ES256KSigner } from "did-jwt";
+ import { EBSI_DID_SPECS, LEGAL_ENTITY, NATURAL_PERSON, util as ebsiDidResolverUtil, } from "@cef-ebsi/ebsi-did-resolver";
+ import { util as keyDidResolverUtil } from "@cef-ebsi/key-did-resolver";
+ import { remove0xPrefix, hexStringToBase64Url } from "./utils";
+@@ -106,16 +105,6 @@ class EbsiWallet {
+             gasLimit: gasEstimation.mul(14).div(10),
+         };
+     }
+-    async signJwt(payload, options, header) {
+-        const signer = ES256KSigner(__classPrivateFieldGet(this, _EbsiWallet_privateKey, "f"));
+-        const signedJwt = await createJWT(payload, {
+-            signer,
+-            issuer: options.issuer,
+-            expiresIn: options.expiresIn,
+-            canonicalize: true,
+-        }, header);
+-        return signedJwt;
+-    }
+ }
+ _EbsiWallet_privateKey = new WeakMap();
+ EbsiWallet.ec = new EC("secp256k1");
+diff --git a/node_modules/@cef-ebsi/wallet-lib/dist/node/esm/package.json b/node_modules/@cef-ebsi/wallet-lib/dist/node/esm/package.json
+index 6990891..67a3377 100644
+--- a/node_modules/@cef-ebsi/wallet-lib/dist/node/esm/package.json
++++ b/node_modules/@cef-ebsi/wallet-lib/dist/node/esm/package.json
+@@ -1 +1,55 @@
+-{"type": "module"}
++{
++  "type": "module",
++  "react-native": {
++    "zlib": "browserify-zlib",
++    "console": "console-browserify",
++    "constants": "constants-browserify",
++    "crypto": "react-native-crypto",
++    "dns": "dns.js",
++    "net": "react-native-tcp",
++    "domain": "domain-browser",
++    "http": "@tradle/react-native-http",
++    "https": "https-browserify",
++    "os": "react-native-os",
++    "path": "path-browserify",
++    "querystring": "querystring-es3",
++    "fs": "react-native-level-fs",
++    "_stream_transform": "readable-stream/transform",
++    "_stream_readable": "readable-stream/readable",
++    "_stream_writable": "readable-stream/writable",
++    "_stream_duplex": "readable-stream/duplex",
++    "_stream_passthrough": "readable-stream/passthrough",
++    "dgram": "react-native-udp",
++    "stream": "stream-browserify",
++    "timers": "timers-browserify",
++    "tty": "tty-browserify",
++    "vm": "vm-browserify",
++    "tls": false
++  },
++  "browser": {
++    "zlib": "browserify-zlib",
++    "console": "console-browserify",
++    "constants": "constants-browserify",
++    "crypto": "react-native-crypto",
++    "dns": "dns.js",
++    "net": "react-native-tcp",
++    "domain": "domain-browser",
++    "http": "@tradle/react-native-http",
++    "https": "https-browserify",
++    "os": "react-native-os",
++    "path": "path-browserify",
++    "querystring": "querystring-es3",
++    "fs": "react-native-level-fs",
++    "_stream_transform": "readable-stream/transform",
++    "_stream_readable": "readable-stream/readable",
++    "_stream_writable": "readable-stream/writable",
++    "_stream_duplex": "readable-stream/duplex",
++    "_stream_passthrough": "readable-stream/passthrough",
++    "dgram": "react-native-udp",
++    "stream": "stream-browserify",
++    "timers": "timers-browserify",
++    "tty": "tty-browserify",
++    "vm": "vm-browserify",
++    "tls": false
++  }
++}

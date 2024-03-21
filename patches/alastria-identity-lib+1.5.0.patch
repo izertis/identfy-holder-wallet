@@ -1,0 +1,13 @@
+diff --git a/node_modules/alastria-identity-lib/dist/utils/AIdUtils.js b/node_modules/alastria-identity-lib/dist/utils/AIdUtils.js
+index 292b547..d62f4c0 100644
+--- a/node_modules/alastria-identity-lib/dist/utils/AIdUtils.js
++++ b/node_modules/alastria-identity-lib/dist/utils/AIdUtils.js
+@@ -23,7 +23,7 @@ class AIdUtils {
+      * @returns ProxyAddress part of the did
+      */
+     static getProxyAddress(did) {
+-        return did.split(':')[4];
++        return `0x${did.split(':')[4]}`;
+     }
+ }
+ exports.AIdUtils = AIdUtils;

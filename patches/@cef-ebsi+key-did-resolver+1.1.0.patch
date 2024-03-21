@@ -1,0 +1,33 @@
+diff --git a/node_modules/@cef-ebsi/key-did-resolver/dist/codecs/jwk_jcs-pub.js b/node_modules/@cef-ebsi/key-did-resolver/dist/codecs/jwk_jcs-pub.js
+index 858288e..7e8ac6b 100644
+--- a/node_modules/@cef-ebsi/key-did-resolver/dist/codecs/jwk_jcs-pub.js
++++ b/node_modules/@cef-ebsi/key-did-resolver/dist/codecs/jwk_jcs-pub.js
+@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.decode = exports.encode = exports.code = exports.name = void 0;
+-const web_encoding_1 = require("web-encoding");
++const web_encoding_1 = require("text-encoding");
+ const lodash_isplainobject_1 = __importDefault(require("lodash.isplainobject"));
+ exports.name = "jwk_jcs-pub";
+ exports.code = 0xeb51;
+@@ -75,6 +75,9 @@ function validateJwk(jwk) {
+             check(jwk.e, '"e" (Exponent) Parameter');
+             check(jwk.n, '"n" (Modulus) Parameter');
+             break;
++        case 'oct':
++            check(jwk.k, '"k" (Key Value) Parameter');
++            break;
+         default:
+             throw new Error('"kty" (Key Type) Parameter missing or unsupported');
+     }
+@@ -100,6 +103,9 @@ function canonicaliseJwk(jwk) {
+         case "RSA":
+             components = { e: jwk.e, kty: jwk.kty, n: jwk.n };
+             break;
++        case "oct":
++            components = { k: jwk.k, kty: jwk.kty };
++            break;
+     }
+     return components;
+ }

@@ -1,0 +1,1 @@
+export type JWT = `ey${string}.ey${string}.${string}`

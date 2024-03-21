@@ -1,0 +1,41 @@
+name: Changelog Warning
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  changelog-warning:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install @octokit/rest
+
+      - name: Check PR for Changelog
+        id: changelog-check
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const prUrl = context.payload.pull_request.html_url;
+            const prAuthor = context.payload.pull_request.user.login;
+            const prRepo = context.payload.repository.full_name;
+
+            const octokit = require("@octokit/rest")();
+            const issueComment = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: "⚠️ **Please remember to update the changelog for this pull request.**"
+            };
+
+            // Make a request to add the comment
+            octokit.issues.createComment(issueComment);
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,820 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SecurityPhraseConfirm screen should render SecurityPhraseConfirm screen 1`] = `
+<View
+  className="StyledNativeComponent sc-gKPRtg ioznsx"
+>
+  <View
+    className="sc-ipEyDJ iaMRWP"
+  >
+    <View
+      collapsable={false}
+      style={
+        {
+          "backgroundColor": "transparent",
+          "borderRadius": 20,
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 0,
+            "width": 0,
+          },
+          "shadowOpacity": 0,
+          "shadowRadius": 0,
+        }
+      }
+      testID="button-container-outer-layer"
+    >
+      <View
+        className="sc-iBYQkv ecSfdn"
+        collapsable={false}
+        style={
+          {
+            "backgroundColor": "transparent",
+            "borderColor": "transparent",
+            "borderRadius": 20,
+            "borderStyle": "solid",
+            "borderWidth": 0,
+            "flex": undefined,
+            "minWidth": 64,
+            "shadowColor": "#000",
+            "shadowOffset": {
+              "height": 0,
+              "width": 0,
+            },
+            "shadowOpacity": 0,
+            "shadowRadius": 0,
+          }
+        }
+        testID="button-container"
+      >
+        <View
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": false,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            [
+              {
+                "overflow": "hidden",
+              },
+              {
+                "borderRadius": 20,
+              },
+            ]
+          }
+          testID="button"
+        >
+          <View
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              style={
+                [
+                  {
+                    "marginLeft": 12,
+                    "marginRight": -4,
+                  },
+                  {
+                    "marginLeft": 16,
+                    "marginRight": -16,
+                  },
+                  {
+                    "marginLeft": 12,
+                    "marginRight": -8,
+                  },
+                ]
+              }
+              testID="button-icon-container"
+            >
+              <Text />
+            </View>
+            <Text
+              numberOfLines={1}
+              selectable={false}
+              style={
+                [
+                  {
+                    "textAlign": "left",
+                  },
+                  {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "fontFamily": "System",
+                      "fontSize": 14,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1,
+                      "lineHeight": 20,
+                    },
+                    [
+                      {
+                        "marginHorizontal": 16,
+                        "marginVertical": 9,
+                        "textAlign": "center",
+                      },
+                      false,
+                      {
+                        "marginHorizontal": 16,
+                      },
+                      undefined,
+                      false,
+                      {
+                        "color": "rgba(103, 80, 164, 1)",
+                        "fontFamily": "System",
+                        "fontSize": 14,
+                        "fontWeight": "500",
+                        "letterSpacing": 0.1,
+                        "lineHeight": 20,
+                      },
+                      {
+                        "color": "#eb5b5b",
+                      },
+                    ],
+                  ],
+                ]
+              }
+              testID="button-text"
+            >
+              GO_BACK
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+    <Text
+      bold={true}
+      className="sc-hLBbgP sc-jSUZER sc-ftTHYK PgSAu dXSLfz ejyDuZ"
+      fontFamily="Montserrat-Bold"
+      style={
+        [
+          {
+            "textAlign": "left",
+          },
+          {
+            "color": "rgba(28, 27, 31, 1)",
+            "fontFamily": "System",
+            "fontWeight": "400",
+            "letterSpacing": 0,
+          },
+          {
+            "writingDirection": "ltr",
+          },
+          undefined,
+        ]
+      }
+      testID="title"
+    >
+      CONFIRM_TITLE
+    </Text>
+    <View
+      style={
+        [
+          {
+            "backgroundColor": "#fff",
+          },
+          undefined,
+        ]
+      }
+    >
+      <View
+        style={{}}
+      >
+        <View
+          pointerEvents="none"
+          style={
+            [
+              {
+                "bottom": 0,
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 6,
+              },
+              {
+                "backgroundColor": "rgba(255, 251, 254, 1)",
+                "borderColor": "#363d58",
+                "borderRadius": 4,
+                "borderWidth": 1,
+              },
+              undefined,
+            ]
+          }
+          testID="text-input-outline"
+        />
+        <View>
+          <View
+            style={
+              [
+                {
+                  "paddingBottom": 0,
+                },
+                {
+                  "minHeight": 120,
+                  "paddingTop": 8,
+                },
+              ]
+            }
+          >
+            <View
+              collapsable={false}
+              pointerEvents="none"
+              style={
+                {
+                  "bottom": 0,
+                  "left": 0,
+                  "opacity": 1,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
+                  "transform": [
+                    {
+                      "translateX": 0,
+                    },
+                  ],
+                  "zIndex": 3,
+                }
+              }
+            >
+              <Text
+                collapsable={false}
+                maxFontSizeMultiplier={1.5}
+                numberOfLines={1}
+                style={
+                  {
+                    "backgroundColor": "rgba(255, 251, 254, 1)",
+                    "color": "transparent",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                    "fontWeight": undefined,
+                    "left": 8,
+                    "letterSpacing": 0.15,
+                    "lineHeight": undefined,
+                    "opacity": -0.6666666666666667,
+                    "paddingHorizontal": 0,
+                    "position": "absolute",
+                    "textAlign": "left",
+                    "top": 69,
+                    "transform": [
+                      {
+                        "translateX": 0,
+                      },
+                      {
+                        "translateY": 0,
+                      },
+                      {
+                        "scale": 1,
+                      },
+                      {
+                        "scaleY": 1,
+                      },
+                    ],
+                    "width": -16,
+                    "writingDirection": "ltr",
+                  }
+                }
+              >
+                INPUT_LABEL
+              </Text>
+              <Text
+                collapsable={false}
+                maxFontSizeMultiplier={1.5}
+                numberOfLines={1}
+                onLayout={[Function]}
+                style={
+                  {
+                    "color": "#363d58",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                    "fontWeight": undefined,
+                    "left": 0,
+                    "letterSpacing": 0.15,
+                    "lineHeight": undefined,
+                    "opacity": 0,
+                    "paddingHorizontal": 16,
+                    "position": "absolute",
+                    "textAlign": "left",
+                    "top": 68,
+                    "transform": [
+                      {
+                        "translateX": 0,
+                      },
+                      {
+                        "translateY": 0,
+                      },
+                      {
+                        "scale": 1,
+                      },
+                    ],
+                    "writingDirection": "ltr",
+                  }
+                }
+                testID="text-input-outlined-label-active"
+              >
+                INPUT_LABEL
+              </Text>
+              <Text
+                collapsable={false}
+                maxFontSizeMultiplier={1.5}
+                numberOfLines={1}
+                style={
+                  {
+                    "color": "rgba(73, 69, 79, 1)",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                    "fontWeight": undefined,
+                    "left": 0,
+                    "letterSpacing": 0.15,
+                    "lineHeight": undefined,
+                    "opacity": 0,
+                    "paddingHorizontal": 16,
+                    "position": "absolute",
+                    "textAlign": "left",
+                    "top": 68,
+                    "transform": [
+                      {
+                        "translateX": 0,
+                      },
+                      {
+                        "translateY": 0,
+                      },
+                      {
+                        "scale": 1,
+                      },
+                    ],
+                    "writingDirection": "ltr",
+                  }
+                }
+                testID="text-input-outlined-label-inactive"
+              >
+                INPUT_LABEL
+              </Text>
+            </View>
+            <TextInput
+              className="sc-bcXHqe ibYIDo"
+              containerStyle={
+                {
+                  "paddingHorizontal": 0,
+                }
+              }
+              cursorColor="#363d58"
+              editable={false}
+              errorStyle={
+                {
+                  "color": "#eb5b5b",
+                }
+              }
+              inputContainerStyle={
+                {
+                  "marginTop": 10,
+                }
+              }
+              inputStyle={
+                {
+                  "fontSize": 16,
+                }
+              }
+              maxFontSizeMultiplier={1.5}
+              multiline={true}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder=" "
+              placeholderTextColor="#aaa"
+              selectionColor="#eb5b5b"
+              style={
+                [
+                  {
+                    "margin": 0,
+                    "zIndex": 1,
+                  },
+                  {
+                    "height": 120,
+                  },
+                  {
+                    "paddingBottom": 24,
+                    "paddingTop": 24,
+                  },
+                  {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                    "fontWeight": undefined,
+                    "letterSpacing": 0.15,
+                    "lineHeight": undefined,
+                    "paddingHorizontal": 16,
+                    "textAlign": "left",
+                    "textAlignVertical": "top",
+                  },
+                  false,
+                  [
+                    {},
+                  ],
+                  {
+                    "fontFamily": "Muli",
+                    "lineHeight": 25,
+                  },
+                ]
+              }
+              testID="text-input-outlined"
+              underlineColorAndroid="transparent"
+              value=""
+            />
+          </View>
+        </View>
+      </View>
+    </View>
+    <View
+      className="sc-csuSiG bsbtvK"
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "opacity": 1,
+          }
+        }
+      >
+        <Text
+          className="sc-dkrFOg fRBncy"
+        >
+          mocked-mnemonic
+        </Text>
+      </View>
+    </View>
+    <View
+      collapsable={false}
+      style={
+        {
+          "backgroundColor": "transparent",
+          "borderRadius": 20,
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 0,
+            "width": 0,
+          },
+          "shadowOpacity": 0,
+          "shadowRadius": 0,
+        }
+      }
+      testID="button-container-outer-layer"
+    >
+      <View
+        borderWidth={0}
+        className="sc-eDWCr kVuCHA"
+        collapsable={false}
+        color="#eb5b5b"
+        style={
+          {
+            "backgroundColor": "transparent",
+            "borderColor": "transparent",
+            "borderRadius": 20,
+            "borderStyle": "solid",
+            "borderWidth": 0,
+            "flex": undefined,
+            "minWidth": 64,
+            "shadowColor": "#000",
+            "shadowOffset": {
+              "height": 0,
+              "width": 0,
+            },
+            "shadowOpacity": 0,
+            "shadowRadius": 0,
+          }
+        }
+        testID="button-container"
+      >
+        <View
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": true,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            [
+              {
+                "overflow": "hidden",
+              },
+              {
+                "borderRadius": 20,
+              },
+            ]
+          }
+          testID="button"
+        >
+          <View
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              numberOfLines={1}
+              selectable={false}
+              style={
+                [
+                  {
+                    "textAlign": "left",
+                  },
+                  {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "fontFamily": "System",
+                      "fontSize": 14,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1,
+                      "lineHeight": 20,
+                    },
+                    [
+                      {
+                        "marginHorizontal": 16,
+                        "marginVertical": 9,
+                        "textAlign": "center",
+                      },
+                      false,
+                      {
+                        "marginHorizontal": 12,
+                      },
+                      undefined,
+                      false,
+                      {
+                        "color": "rgba(28, 27, 31, 0.38)",
+                        "fontFamily": "System",
+                        "fontSize": 14,
+                        "fontWeight": "500",
+                        "letterSpacing": 0.1,
+                        "lineHeight": 20,
+                      },
+                      undefined,
+                    ],
+                  ],
+                ]
+              }
+              testID="button-text"
+            >
+              RESET_BUTTON
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+    <View
+      className="sc-kDvujY ibcXlS"
+    >
+      <View
+        collapsable={false}
+        style={
+          {
+            "backgroundColor": "transparent",
+            "borderRadius": 20,
+            "shadowColor": "#000",
+            "shadowOffset": {
+              "height": 0,
+              "width": 0,
+            },
+            "shadowOpacity": 0,
+            "shadowRadius": 0,
+          }
+        }
+        testID="button-container-outer-layer"
+      >
+        <View
+          collapsable={false}
+          style={
+            {
+              "backgroundColor": "transparent",
+              "borderColor": "transparent",
+              "borderRadius": 20,
+              "borderStyle": "solid",
+              "borderWidth": 0,
+              "flex": undefined,
+              "minWidth": 64,
+              "shadowColor": "#000",
+              "shadowOffset": {
+                "height": 0,
+                "width": 0,
+              },
+              "shadowOpacity": 0,
+              "shadowRadius": 0,
+            }
+          }
+          testID="button-container"
+        >
+          <View
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": true,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              [
+                {
+                  "overflow": "hidden",
+                },
+                {
+                  "borderRadius": 20,
+                },
+              ]
+            }
+            testID="button"
+          >
+            <View
+              style={
+                [
+                  {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                    "justifyContent": "center",
+                  },
+                  {
+                    "backgroundColor": "#ccc",
+                    "borderRadius": 15,
+                    "fontFamily": "Muli",
+                    "height": 39,
+                    "width": 224,
+                  },
+                ]
+              }
+            >
+              <Text
+                numberOfLines={1}
+                selectable={false}
+                style={
+                  [
+                    {
+                      "textAlign": "left",
+                    },
+                    {
+                      "color": "rgba(28, 27, 31, 1)",
+                      "writingDirection": "ltr",
+                    },
+                    [
+                      {
+                        "fontFamily": "System",
+                        "fontSize": 14,
+                        "fontWeight": "500",
+                        "letterSpacing": 0.1,
+                        "lineHeight": 20,
+                      },
+                      [
+                        {
+                          "marginHorizontal": 16,
+                          "marginVertical": 9,
+                          "textAlign": "center",
+                        },
+                        false,
+                        {
+                          "marginHorizontal": 12,
+                        },
+                        undefined,
+                        false,
+                        {
+                          "color": "rgba(28, 27, 31, 0.38)",
+                          "fontFamily": "System",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "letterSpacing": 0.1,
+                          "lineHeight": 20,
+                        },
+                        {
+                          "color": "#fff",
+                          "fontFamily": "Muli",
+                          "letterSpacing": 0.57,
+                        },
+                      ],
+                    ],
+                  ]
+                }
+                testID="button-text"
+              >
+                CONFIRM_BUTTON
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;
