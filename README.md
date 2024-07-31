@@ -37,14 +37,14 @@ Identfy is a product developed based on blockchain technology, allowing verifica
 - [Trademark](#trademark)
 
 
-## Usage
+## Distribution
 
 You can download or get the Holder Wallet at:
 
 <div>
-<a href='https://apps.apple.com/'><img alt='Download on the App Store' src='./docs/img/stores/appstore.svg' width='250px;'/></a>
+<a href='[https://apps.apple.com/](https://apps.apple.com/do/app/identfy/id6476503276)'><img alt='Download on the App Store' src='./docs/img/stores/appstore.svg' width='250px;'/></a>
 <br/>
-<a href='https://play.google.com/store/apps/details?id='><img alt='Get it on Google Play' src='./docs/img/stores/play-store.png' width='250px'/></a></div>
+<a href='[https://play.google.com/store/apps/details?id=](https://play.google.com/store/apps/details?id=com.identfywallet.app)'><img alt='Get it on Google Play' src='./docs/img/stores/play-store.png' width='250px'/></a></div>
 
 <br/>
 
