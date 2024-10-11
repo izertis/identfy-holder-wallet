@@ -49,9 +49,7 @@ const RequestPreauthorizeUserPinModal = (props: ModalProps) => {
         <RequestPreauthorizeUserPinModalStyled.Button
           onPress={() => handleAccept(data)}
         >
-          <RequestPreauthorizeUserPinModalStyled.ButtonText>
-            {t(RequestPreauthorizeUserPinModalI18nKeys.REQUEST)}
-          </RequestPreauthorizeUserPinModalStyled.ButtonText>
+          {t(RequestPreauthorizeUserPinModalI18nKeys.REQUEST)}
         </RequestPreauthorizeUserPinModalStyled.Button>
       </RequestPreauthorizeUserPinModalStyled.ButtonContainer>
     </RequestPreauthorizeUserPinModalStyled.ModalContainer>

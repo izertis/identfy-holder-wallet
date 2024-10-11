@@ -1,8 +1,6 @@
 import { useState } from 'react'
-import { FlatList, View } from 'react-native'
-import { ActionLog } from '../../../../types/keychain'
-import { ColorKeys, getThemeColor } from '../../../../constants/Colors'
-import { IconButton } from 'react-native-paper'
+import { FlatList } from 'react-native'
+import { ActionLog } from '../../../../services/open-id/types'
 import Loading from '../../../../components/Loading'
 import HistoricalStyled from '../../styles'
 import HistoricalDetail from '../HistoricalDetail'
@@ -41,20 +39,8 @@ const HistoricalList = (props: Props) => {
     )
   }
 
-  const mockFilter = {
-    a: 'Todo',
-    b: 'General',
-    c: 'Salud',
-    Educacion: 'Educación',
-  }
-
   return (
-    <>
-      <HistoricalStyled.HeaderControlView>
-        <HistoricalStyled.DropDownSelect onChange={() => { }} data={mockFilter} titleStyle={{ color: getThemeColor(ColorKeys.primary) }} title="Filtro" />
-        <IconButton icon="magnify" iconColor={getThemeColor(ColorKeys.primary)} style={{ marginRight: -70 }} onPress={() => { }} />
-        <IconButton icon="calendar" iconColor={getThemeColor(ColorKeys.primary)} onPress={() => { }} />
-      </HistoricalStyled.HeaderControlView>
+    <HistoricalStyled.ListContainer>
       <FlatList style={{ zIndex: -10 }}
         data={paginatedData}
         keyExtractor={(item, index) => `Log-${index}`}
@@ -63,7 +49,7 @@ const HistoricalList = (props: Props) => {
         onEndReachedThreshold={0.1}
         ListFooterComponent={renderFooter}
       />
-    </>
+    </HistoricalStyled.ListContainer>
   )
 }
 

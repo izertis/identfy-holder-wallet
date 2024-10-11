@@ -2,9 +2,8 @@ import { useMemo, useState } from 'react'
 import CredentialStyled from '../../styles'
 import { FlatList } from 'react-native'
 import CredentialDetail from '../CredentialDetail'
-import { CredentialData } from '../../../../types/keychain'
+import { CredentialData } from '../../../../services/open-id/types'
 import Loading from '../../../../components/Loading'
-import { ColorKeys, getThemeColor } from '../../../../constants/Colors'
 import ButtonMailbox from '../../../../components/ButtonMailbox'
 
 interface Props {
@@ -12,13 +11,6 @@ interface Props {
 }
 
 const CredentialList = (props: Props) => {
-  const mockFilter = {
-    a: 'Todo',
-    b: 'General',
-    c: 'Salud',
-    Educacion: 'Educación',
-  }
-
   const [isLoading, setIsLoading] = useState(false)
   const [pageNumber, setPageNumber] = useState(1)
   const itemsPerPage = 8
@@ -49,7 +41,6 @@ const CredentialList = (props: Props) => {
   return (
     <>
       <CredentialStyled.HeaderContainer>
-        <CredentialStyled.DropDownSelect onChange={() => { }} data={mockFilter} titleStyle={{ color: getThemeColor(ColorKeys.primary) }} title="Filtro" />
         <CredentialStyled.ButtonContainer>
           <ButtonMailbox />
         </CredentialStyled.ButtonContainer>
@@ -58,10 +49,11 @@ const CredentialList = (props: Props) => {
       <FlatList
         data={paginatedData}
         keyExtractor={(item, index) => `Credential-${index}`}
-        renderItem={({ item }) => <CredentialDetail date={item.validFrom} title={'Credencial'} issuer={item.issuer} credential={item.credential} />}
+        renderItem={({ item }) => <CredentialDetail issuer={item.issuer} credential={item.credential} status={item.status} timestamp={item.timestamp} />}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.1}
         ListFooterComponent={renderFooter}
+        ListFooterComponentStyle={{ paddingBottom: 100 }}
       />
     </>
   )

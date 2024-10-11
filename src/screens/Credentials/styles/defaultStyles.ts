@@ -6,12 +6,14 @@ import { DescriptionText } from '../../../components/atomic_components/Text/vari
 import { safeStyledText } from '../../../components/atomic_components/Text'
 import DropDownSelect from '../../../components/DropDownSelect'
 import { TEST_LABELS } from '../constants/testLabels'
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, Text } from 'react-native'
+import { List } from 'react-native-paper'
 
 const defaultStyles = {
 	ActionIcon: styled(Icon).attrs({
 		name: 'qr-code-scanner',
 		size: 32,
+		color: getThemeColor(ColorKeys.buttonText),
 	})`
 		margin-left: 10px;
 	`,
@@ -22,7 +24,8 @@ const defaultStyles = {
 		border-width: 1px;
 		border-color: #00000010;
 		margin-top: -2px;
-		background-color: #00000001;
+		background-color: ${getThemeColor(ColorKeys.background)};
+		width: 100%;
 	`,
 
 	DropDownSelect: styled(DropDownSelect).attrs((props) => ({
@@ -53,11 +56,6 @@ const defaultStyles = {
 		padding-vertical: 20px;
 	`,
 
-	CredentialDetailTitleContainer: styled(View)`
-		display: flex;
-		flex-direction: column;
-	`,
-
 	MailboxButton: styled(TouchableOpacity)``,
 
 	HeaderContainer: styled(View)`
@@ -67,9 +65,26 @@ const defaultStyles = {
 
 	ButtonContainer: styled(View)`
 		justify-content: center;
-		width: 55%;
 		margin-top: 10px;
-		margin-left: -20px;
+		margin-bottom: 10px;
+		margin-left: 15px;
+	`,
+
+	LabelText: styled(Text)`
+		font-weight: bold;
+	`,
+
+	ExpirationText: styled(Text)<{ isExpired: boolean }>`
+		color: ${({ isExpired }) => (isExpired ? getThemeColor(ColorKeys.error) : getThemeColor(ColorKeys.placeholder))};
+	`,
+
+	StyledAccordion: styled(List.Accordion)`
+		padding-vertical: -10px;
+		background-color: ${getThemeColor(ColorKeys.background)};
+	`,
+
+	LoadingContainer: styled(View)`
+		padding: 16px;
 	`,
 }
 

@@ -15,6 +15,7 @@ interface Props {
   issuer?: string
   key?: string
 }
+
 const HistoricalDetail = (props: Props) => {
   const { t } = useTranslation(SCREEN.Historical)
 
@@ -22,32 +23,36 @@ const HistoricalDetail = (props: Props) => {
     switch (props.title) {
       case 'Credential added':
         return {
-          message: 'Acreditación añadida',
+          message: t(historicalI18nKeys.CREDENTIAL_ADDED),
           icon: 'account-box-outline'
         }
       case 'Credential expired':
         return {
-          message: 'Acreditación expirada',
+          message: t(historicalI18nKeys.CREDENTIAL_EXPIRED),
           icon: 'clock-fast'
         }
       case 'Presentation emitted':
         return {
-          message: 'Presentation realizada',
+          message: t(historicalI18nKeys.PRESENTATION_EMITTED),
           icon: 'folder-move-outline'
+        }
+      case 'Credential revoked':
+        return {
+          message: t(historicalI18nKeys.CREDENTIAL_REVOKED),
+          icon: 'file-cancel-outline'
         }
       case 'Presentation revoked':
         return {
-          message: 'Revocación de acceso',
+          message: t(historicalI18nKeys.PRESENTATION_REVOKED),
           icon: 'folder-remove-outline'
         }
       default:
         return {
-          message: '',
-          icon: ''
+          message: t(historicalI18nKeys.DEFAULT_MESSAGE),
+          icon: 'clock'
         }
     }
   }
-
 
   return (
     <HistoricalStyled.HistoricalDetailContainer key={props.key}>

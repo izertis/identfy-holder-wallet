@@ -18,7 +18,12 @@ const defaultStyles = {
 	`,
 
 	ContentView: styled(View)`
-		height: 90%;
+		height: 100%;
+	`,
+
+	ListContainer: styled(View)`
+		height: 100%, 
+		margin-top: 25px 
 	`,
 
 	HistoricalDetailContainer: styled(View)`

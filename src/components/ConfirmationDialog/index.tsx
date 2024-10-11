@@ -43,10 +43,10 @@ export default function ConfirmationDialog(props: {
         }</Dialog.Content>
         <ButtonContainer>
           <Dialog.Actions>
-            <StyledButton textColor={getThemeColor(ColorKeys.text)} buttonColor={getThemeColor(ColorKeys.primary)} uppercase={false} onPress={props.onCancel}>{cancelButtonLabel}</StyledButton>
+            <StyledButton textColor={getThemeColor(ColorKeys.buttonText)} buttonColor={getThemeColor(ColorKeys.primary)} uppercase={false} onPress={props.onCancel}>{cancelButtonLabel}</StyledButton>
           </Dialog.Actions>
           <Dialog.Actions>
-            <StyledButton textColor={getThemeColor(ColorKeys.text)} buttonColor={props.danger ? 'red' : getThemeColor(ColorKeys.primary)} uppercase={false} onPress={props.onPress}>{continueButtonLabel}</StyledButton>
+            <StyledButton textColor={getThemeColor(ColorKeys.buttonText)} buttonColor={props.danger ? 'red' : getThemeColor(ColorKeys.primary)} uppercase={false} onPress={props.onPress}>{continueButtonLabel}</StyledButton>
           </Dialog.Actions>
         </ButtonContainer>
       </Dialog>

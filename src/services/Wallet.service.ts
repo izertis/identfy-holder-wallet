@@ -1,46 +1,43 @@
-import 'react-native-get-random-values'
-import '@ethersproject/shims'
-import { ethers, utils } from 'ethers'
 import { WalletSecurityInformation } from '../interfaces/wallet'
 import { saveJWKKeys, setKeychainDataObject } from '../utils/keychain'
-import { generateDerivationPath, generateWallet } from './derivationPath'
-import { derivationPathFormats } from './derivationPath/constants'
+import { derivationPathFormats } from './hd-wallets/constants'
 import { KeyChainData } from '../types/keychain'
 import { ec as EC } from 'elliptic'
 import { base64url } from 'jose'
+import { generateMnemonic } from '@dreson4/react-native-quick-bip39'
+import { encryptData } from '../utils/crypto'
+import LocalStorageService, { STORAGE_KEYS } from './LocalStorage.service'
+import { generateDerivationPath, generateIdentityWallet } from './hd-wallets'
 
 export const createEncryptedWallet = async (pin: string): Promise<WalletSecurityInformation> => {
-	const wallet = ethers.Wallet.createRandom()
+	const mnemonic = generateMnemonic()
 
 	const derivationPath = generateDerivationPath(derivationPathFormats.MAIN_IDENTITY)
-
-	const identityWallet = generateWallet(wallet.mnemonic.phrase, derivationPath)
-
-	// Convert seed phrase to hash format
-	const seedPhrase = wallet.mnemonic.phrase
-	const seedHash = utils.id(seedPhrase)
+	const identityWallet = generateIdentityWallet(mnemonic, derivationPath)
 
 	if (!identityWallet) throw 'Error, mnemonic is undefined'
-	const encryptedWallet = await identityWallet.encrypt(pin)
+
+	const walletPrivateKey = identityWallet.getPrivateKeyString()
+
+	const encryptedWalletPrivateKey = encryptData(walletPrivateKey, pin)
 
 	const keychainData: KeyChainData = {
-		wallet: encryptedWallet,
-		mnemonicHash: seedHash,
-		privateKey: identityWallet.privateKey,
-		pin,
+		encryptedPrivateKey: encryptedWalletPrivateKey,
 	}
 	await setKeychainDataObject(keychainData)
 
+	// TO DO: When we remove all unnecessary information from the keychain, do not store the PIN. The user will need to enter the PIN every time they want to use the private key.
+	await LocalStorageService.storeData(STORAGE_KEYS.PIN, pin)
+
 	// Generate JWK from wallet private key
 	const secp256k1 = new EC('secp256k1')
-	const privateKey = identityWallet.privateKey
-	const keyPair = secp256k1.keyFromPrivate(privateKey)
+	const keyPair = secp256k1.keyFromPrivate(walletPrivateKey.substring(2))
 	const x = keyPair.getPublic().getX().toBuffer('be', 32)
 	const y = keyPair.getPublic().getY().toBuffer('be', 32)
 
 	const d = keyPair.getPrivate().toBuffer('be', 32)
 
-	const privateKeyHex = keyPair.getPrivate('hex')
+	const privateKeyHex = d.toString('hex')
 	const publicKeyHex = keyPair.getPublic('hex')
 
 	const publicKeyJWK = {
@@ -61,7 +58,7 @@ export const createEncryptedWallet = async (pin: string): Promise<WalletSecurity
 	await saveJWKKeys(privateKeyJWK, publicKeyJWK, privateKeyHex, publicKeyHex)
 
 	return {
-		mnemonicPhrase: wallet.mnemonic.phrase,
+		mnemonicPhrase: mnemonic,
 		derivationPath,
 	}
 }

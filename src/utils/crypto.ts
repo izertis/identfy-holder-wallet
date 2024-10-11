@@ -1,14 +1,34 @@
+import 'react-native-get-random-values'
 import '@ethersproject/shims'
-import crypto from 'react-native-crypto'
-import { JWK } from 'jose'
+import Crypto from 'react-native-quick-crypto'
+import { JWK, base64url } from 'jose'
 import { computePublicKey } from 'ethers/lib/utils'
 import { ec as EC } from 'elliptic'
-import { base64urlDecode } from './jwt'
 import bs58 from 'bs58'
 import sodium from 'react-native-libsodium'
+import { BinaryLike } from 'react-native-quick-crypto/lib/typescript/Utils'
+import { hdkey } from 'ethereumjs-wallet'
+import { publicToAddress, toChecksumAddress } from 'ethereumjs-util'
+
+export function base64urlEncode(str: string | number[] | Uint8Array | Buffer) {
+	let data: string | Uint8Array = str as any
+	if (typeof str === typeof []) {
+		data = Uint8Array.from(str as number[])
+	}
+	return base64url.encode(data)
+}
+
+export function base64urlDecode(derSign: string | number[] | Uint8Array) {
+	let data: string | Uint8Array = derSign as any
+	if (typeof derSign === typeof []) {
+		data = Uint8Array.from(derSign as number[])
+	}
+	return base64url.decode(data)
+}
 
 export const generateRandomHex = (num: number) => {
-	const randomString = crypto.randomBytes(num).toString('hex')
+	//@ts-ignore
+	const randomString = Crypto.randomBytes(num).toString('hex')
 	return randomString
 }
 
@@ -17,27 +37,23 @@ export const getPublicKeyFromPrivateKey = (userPrivateKey: string) => {
 }
 
 export const digest = async (algorithm: string, data: any) => {
-	const digest = crypto.createHash(algorithm)
+	const digest = Crypto.createHash(algorithm)
 	digest.update(data)
 	const result = digest.digest()
 	return new Uint8Array(result)
 }
 
 export const hashSha256 = async (data: any) => {
-	const digest = crypto.createHash('sha256')
+	const digest = Crypto.createHash('sha256')
 	digest.update(data)
 	const result = digest.digest('hex')
 	return result
 }
 
-export function parseJwt(token: string) {
-	return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
-}
-
-export const keyFromJWK = async (jwk: JWK): Promise<EC.KeyPair> => {
-	var curve = new EC('p256')
-	var keyParams: any = {}
-	var hasPub = jwk.x && jwk.y
+export const keyFromJWK = async (jwk: JWK, curveParam: string): Promise<EC.KeyPair> => {
+	const curve: EC = new EC(curveParam)
+	const keyParams: any = {}
+	const hasPub = jwk.x && jwk.y
 	if (hasPub) {
 		keyParams.pub = {
 			x: base64urlDecode(jwk.x as string),
@@ -61,16 +77,6 @@ export const convertBase58ToHex = (publicKeyBase58: string) => {
 	return hexKey
 }
 
-/**
- * Generate a cryptographic key pair using the Sodium library.
- *
- * This function asynchronously generates a key pair suitable for cryptographic
- * signing and verification. It returns a public key and a private key in
- * hexadecimal format.
- *
- * @returns {Promise<{ publicKey: string; privateKey: string }>} A promise that
- * resolves to an object containing the public and private keys.
- */
 export async function generateKeyPair(): Promise<{ privateKey: string; publicKey: string }> {
 	await sodium.ready
 	const keyPair = sodium.crypto_sign_keypair()
@@ -82,4 +88,63 @@ export async function generateKeyPair(): Promise<{ privateKey: string; publicKey
 		privateKey,
 		publicKey,
 	}
+}
+
+export const encryptData = (data: string, password: BinaryLike) => {
+	const cipher = Crypto.createCipher('aes-256-cbc', password)
+	let encryptedData = cipher.update(JSON.stringify(data), 'utf8', 'hex')
+	encryptedData += cipher.final('hex')
+	return encryptedData
+}
+
+export const decryptData = (encryptedData: string | ArrayBuffer, password: string): any => {
+	try {
+		const decipher = Crypto.createDecipher('aes-256-cbc', password)
+		let decryptedData = decipher.update(encryptedData, 'hex', 'utf8')
+		decryptedData += decipher.final('utf8')
+		return JSON.parse(decryptedData as string)
+	} catch (error) {
+		console.error('Error decrypting data: ' + error)
+	}
+}
+
+export const selectCurve = (alg: 'ES256' | 'ES256K' | undefined) => {
+	if (!alg) {
+		throw new Error('Algorithm is undefined')
+	}
+	const curve = alg === 'ES256' ? 'p256' : 'secp256k1'
+	return curve
+}
+
+export const getXpubFromEpicDID = (did: string): string | null => {
+	const prefix = 'did:epic:quor:redT:'
+	if (!did.startsWith(prefix)) {
+		console.info('Invalid DID prefix')
+		return null
+	}
+
+	const remainder = did.substring(prefix.length)
+
+	const [baseKey] = remainder.split('?')
+
+	if (!baseKey) {
+		console.error('Invalid DID structure, missing base key')
+		return null
+	}
+
+	return baseKey
+}
+
+export const getEthAddressFromExtenderPublicKey = (issuerDid: any) => {
+	const xpub = getXpubFromEpicDID(issuerDid)
+
+	if (!xpub) return
+
+	const wallet = hdkey.fromExtendedKey(xpub!).getWallet()
+	const publicKey = wallet.getPublicKey()
+
+	const addressBuffer = publicToAddress(publicKey, true)
+	const address = toChecksumAddress(`0x${addressBuffer.toString('hex')}`)
+
+	return address
 }

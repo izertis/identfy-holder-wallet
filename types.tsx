@@ -3,9 +3,6 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
-
-
-
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs'
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -25,13 +22,10 @@ export type RootStackParamList = {
 	SecurityPhraseConfirm: { mneumonic: string; derivationPath: string } | undefined
 	DerivationPath: { derivationPath: string } | undefined
 	NetworkAuth: undefined
-	Recovery: undefined
 	Root: NavigatorScreenParams<RootTabParamList> | undefined
 	Modal: undefined
-	NotFound: { derivationPath: string } | undefined
 	QrReader: { issuer?: string }
 	DidList: undefined
-	Help: undefined
 }
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

@@ -1,3 +1,4 @@
+import 'react-native-get-random-values'
 import "@ethersproject/shims"
 import bs58 from "bs58";
 import * as ethers from "ethers";

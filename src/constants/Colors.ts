@@ -32,6 +32,7 @@ const Color = {
 		disabled: '#ccc',
 		placeholder: '#aaa',
 		inactiveDot: '#555',
+		buttonText: '#fff',
 	},
 	dark: {
 		primary: '#eb5b5b',
@@ -51,6 +52,7 @@ const Color = {
 		disabled: '#ccc',
 		placeholder: '#aaa',
 		inactiveDot: '#555',
+		buttonText: '#fff',
 	},
 	warning: '#778727',
 }

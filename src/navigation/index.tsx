@@ -4,14 +4,13 @@
  *
  */
 
-import { DarkTheme, NavigationContainer } from '@react-navigation/native'
+import { DarkTheme, NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useEffect, useState } from 'react'
 import { ColorSchemeName } from 'react-native'
 import { RootStackParamList, } from '../../types'
 import { ColorKeys, getThemeColor, navTheme } from '../constants/Colors'
 import LoginConfig from '../screens/Login/config'
-import RecoveryConfig from '../screens/Recovery/config'
 import RegisterConfig from '../screens/Register/config'
 import SplashScreenConfig from '../screens/SplashScreen/config'
 import LocalStorageService, { STORAGE_KEYS } from '../services/LocalStorage.service'
@@ -20,15 +19,14 @@ import LinkingConfiguration from './LinkingConfiguration'
 import OnBoardingConfig from '../screens/OnBoarding/config'
 import SecurityPhraseConfirmConfig from '../screens/SecurityPhraseConfirm/config'
 import SecurityPhraseConfig from '../screens/SecurityPhrase/config'
-import NotFoundScreen from '../screens/NotFoundScreen'
 import DerivationPathConfig from '../screens/DerivationPath/config'
 import NetworkAuthConfig from '../screens/NetworkAuth/config'
 import BottomTabNavigator from './BottomTabNavigator'
 import QrReaderConfig from '../screens/QrReader/config'
 import { DeepLinkingWrapper } from './wrappers/DeepLinkingWrapper'
-import { navigationRef } from './RootNavigation'
 import TabNavigatorHeaderDropDown from './BottomTabNavigator/components/TabNavigationHeaderDropdown'
 import DidListConfig from '../screens/DidList/config'
+import { checkIfAppWasReinstalled } from '../utils/keychain'
 
 
 export default function Navigation({
@@ -36,6 +34,9 @@ export default function Navigation({
 }: {
   colorScheme: ColorSchemeName
 }) {
+
+  const navigationRef = useNavigationContainerRef()
+
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
@@ -52,7 +53,6 @@ const navigationScreensConfig: navigationScreensConfigType[] = [
   OnBoardingConfig,
   RegisterConfig,
   LoginConfig,
-  RecoveryConfig,
   SecurityPhraseConfig,
   SecurityPhraseConfirmConfig,
   DerivationPathConfig,
@@ -73,7 +73,11 @@ function RootNavigator(): any {
   const [isWalletCreated, setisWalletCreated] = useState<boolean | null>(null)
 
   useEffect(() => {
-    skipOnboarding()
+    const initialize = async () => {
+      await checkIfAppWasReinstalled()
+      await skipOnboarding()
+    }
+    initialize()
   }, [])
 
   const skipOnboarding = async (): Promise<void> => {
@@ -98,7 +102,6 @@ function RootNavigator(): any {
         {navigationScreensConfig.map((props: any, index) => (
           <Stack.Screen {...props} component={DeepLinkingWrapper(props.component)} key={props.name || index} />
         ))}
-        <Stack.Screen name='NotFound' component={NotFoundScreen} options={{ title: 'Oops!' }} />
         <Stack.Screen
           name='Root'
           component={BottomTabNavigator}

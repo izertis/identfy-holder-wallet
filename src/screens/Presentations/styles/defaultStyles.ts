@@ -1,5 +1,7 @@
+import { View, Text } from 'react-native'
 import styled from 'styled-components/native'
-import { View } from '../../../components/Themed'
+import { ColorKeys, getThemeColor } from '../../../constants/Colors'
+import { List } from 'react-native-paper'
 
 const defaultStyles = {
 	LoadingView: styled(View)`
@@ -9,7 +11,7 @@ const defaultStyles = {
 	HeaderControlView: styled(View)`
 		display: flex;
 		flex-direction: row;
-		justify-content: space-between;
+		justify-content: flex-end;
 		padding-horizontal: 10px;
 	`,
 
@@ -26,7 +28,16 @@ const defaultStyles = {
 		border-width: 1px;
 		border-color: #00000010;
 		margin-top: -2px;
-		background-color: #00000001;
+		background-color: ${getThemeColor(ColorKeys.background)};
+	`,
+
+	LabelText: styled(Text)`
+		font-weight: bold;
+	`,
+
+	StyledAccordion: styled(List.Accordion)`
+		padding-vertical: -10px;
+		background-color: ${getThemeColor(ColorKeys.background)};
 	`,
 }
 

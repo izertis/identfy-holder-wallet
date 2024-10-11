@@ -13,7 +13,7 @@ import { View } from '../../components/Themed'
 import { executeCallbackFunction } from '../../utils/storeCallback'
 import { StatusBar } from 'expo-status-bar'
 import { ColorKeys, getThemeColor } from '../../constants/Colors'
-import { Platform } from 'react-native'
+import { Keyboard, Platform } from 'react-native'
 
 const Login = ({ route, navigation }: RootStackScreenProps<'Login'>) => {
   const { t } = useTranslation(SCREEN.Login)
@@ -23,11 +23,12 @@ const Login = ({ route, navigation }: RootStackScreenProps<'Login'>) => {
   const [pin, setPin] = useState<string>('')
 
   const login = async () => {
-    setPin('')
-    setIsLoading(true)
+    Keyboard.dismiss()
     const IS_DID_CREATED = await LocalStorageService.getBool(
       STORAGE_KEYS.IS_DID_CREATED
     )
+    await LocalStorageService.storeData(STORAGE_KEYS.PIN, pin)
+    setPin('')
     if (IS_DID_CREATED) {
       try {
         callback
@@ -37,13 +38,15 @@ const Login = ({ route, navigation }: RootStackScreenProps<'Login'>) => {
     } else {
       navigation.replace('NetworkAuth')
     }
+    setPin('')
     setIsLoading(false)
   }
 
   const showError = (): void => {
-    setPin('')
     const content = t(RegisterI18nKeys.ERROR)
     showMessage({ content, type: 'error' })
+    setPin('')
+    setIsLoading(false)
   }
 
   return (
@@ -61,6 +64,7 @@ const Login = ({ route, navigation }: RootStackScreenProps<'Login'>) => {
         </LoginStyled.Title>
         <LoginStyled.InputsContainer>
           <LoginStyled.InputStyled
+            disabled={isLoading}
             value={pin}
             keyboardType="decimal-pad"
             secureTextEntry
@@ -72,11 +76,6 @@ const Login = ({ route, navigation }: RootStackScreenProps<'Login'>) => {
             returnKeyType={Platform.OS === 'android' ? 'send' : 'done'}
           />
         </LoginStyled.InputsContainer>
-        <LoginStyled.RecoveryButton
-          onPress={() => navigation.navigate('Recovery')}
-        >
-          {t(RegisterI18nKeys.RECOVERY)}
-        </LoginStyled.RecoveryButton>
       </View>
       <LoginStyled.ContainerBottom>
         {isLoading ? <LoginStyled.SplashActivityIndicator color={getThemeColor(ColorKeys.text)} size={35} /> : null}
@@ -84,7 +83,10 @@ const Login = ({ route, navigation }: RootStackScreenProps<'Login'>) => {
           testID="startButton"
           disabled={pin === '' || isLoading}
           style={{ flexDirection: 'row' }}
-          onPress={async () => ((await checkPin(pin)) ? login() : showError())}
+          onPress={async () => {
+            setIsLoading(true);
+            ((await checkPin(pin)) ? login() : showError())
+          }}
         >
           {t(RegisterI18nKeys.BUTTON)}
         </LoginStyled.Button>

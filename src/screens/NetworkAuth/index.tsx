@@ -7,10 +7,10 @@ import { SCREEN } from '../../constants/screens'
 import { MessageContext } from '../../context/UserMessage.context'
 import NetworkAuthI18nKeys from './i18n/keys'
 import NetworkAuthStyled from './styles'
-import { createDidLacchain } from '../../services/Lacchain/createDid'
-import { createDidEbsi } from '../../services/Ebsi/createDid'
+import { createDidLacchain } from '../../services/lacchain/createDid'
+import { createDidEbsi } from '../../services/ebsi/createDid'
 import { getKeychainDataObject } from '../../utils/keychain'
-import { createDidAlastria } from '../../services/alastria/did'
+import { createDidAlastria } from '../../services/alastria/createDid'
 import { StatusBar } from 'expo-status-bar'
 import { ColorKeys, getThemeColor } from '../../constants/Colors'
 
@@ -30,9 +30,11 @@ const NetworkAuth = ({ navigation }: RootStackScreenProps<'NetworkAuth'>): JSX.E
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	useEffect(() => {
-		getKeychainDataObject().then((keychain) => {
+		const fetchData = async () => {
+			const keychain = await getKeychainDataObject()
 			setDids(keychain?.did || {})
-		})
+		}
+		fetchData()
 	}, [])
 
 	const checkboxes: Checkbox[] = [

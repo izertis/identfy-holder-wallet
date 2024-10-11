@@ -30,7 +30,7 @@ export const checkMailbox = async () => {
 		},
 	}
 
-	const result = await fetch(process.env.LAC_MAILBOX_URL!, requestOptions)
+	const result = await fetch(`${process.env.LAC_MAILBOX_URL!}/vc`, requestOptions)
 	if (!(result.status >= 200 && result.status < 300)) {
 		return false
 	}
@@ -46,7 +46,14 @@ export const checkMailbox = async () => {
 		const myPrvKeytoBuffer = eccryptoJS.hexToBuffer(decryptPrivateKey!)
 		const decryptedAndFormattedMessages = await decryptMailboxMessages(myPrvKeytoBuffer, body)
 
-		for (const message of decryptedAndFormattedMessages) {
+		for (let message of decryptedAndFormattedMessages) {
+			if (typeof message === 'string' && message.startsWith('ey')) {
+				await saveCredential(message, 'credential')
+			}
+			if (typeof message !== 'object') {
+				message = JSON.parse(message)
+			}
+
 			await saveCredential(message, 'credential')
 		}
 
@@ -60,7 +67,7 @@ export const checkMailbox = async () => {
 			},
 		}
 
-		const result = await fetch(process.env.LAC_MAILBOX_URL!, requestOptions)
+		const result = await fetch(`${process.env.LAC_MAILBOX_URL!}/vc`, requestOptions)
 		if (!(result.status >= 200 && result.status < 300)) {
 			return false
 		}

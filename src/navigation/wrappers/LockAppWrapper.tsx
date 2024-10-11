@@ -8,6 +8,7 @@ const ComponentWrapper =
 
     const handleAppStateChange = async (nextAppState: AppStateStatus): Promise<void> => {
       if (appState === 'active' && nextAppState?.match(/background/)) {
+        await LocalStorageService.removeItem(STORAGE_KEYS.PIN)
         const isWalletCreated = await LocalStorageService.getBool(
           STORAGE_KEYS.IS_WALLET_CREATED
         )

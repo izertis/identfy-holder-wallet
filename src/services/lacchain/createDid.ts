@@ -1,5 +1,8 @@
+import 'react-native-get-random-values'
+import '@ethersproject/shims'
+import { ethers } from 'ethers'
 import { generateKeyPair, getPublicKeyFromPrivateKey } from '../../utils/crypto'
-import { getJWKKeys, getPrivateKey, getWalletAddress, saveDID, saveSignatureKeys } from '../../utils/keychain'
+import { getJWKKeys, getPrivateKey, saveDID, saveSignatureKeys } from '../../utils/keychain'
 import { lacchainDIDBasicConfiguration } from './constants'
 import { checkTxExecution } from './utils'
 import LacchainDID from './DIDConfig/did'
@@ -8,7 +11,7 @@ import { base64url } from 'jose'
 
 export const createDidLacchain = async () => {
 	const privateKey = await getPrivateKey()
-	const address = await getWalletAddress()
+	const address = ethers.utils.computeAddress(privateKey!)
 	const JWKKeys = await getJWKKeys()
 
 	const curve256 = new EC('p256')
@@ -26,7 +29,7 @@ export const createDidLacchain = async () => {
 	try {
 		const did = new LacchainDID({
 			...lacchainDIDBasicConfiguration,
-			address: `0x${address}`,
+			address: `${address}`,
 			controllerPrivateKey: privateKey,
 		})
 

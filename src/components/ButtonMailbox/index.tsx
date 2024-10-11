@@ -10,7 +10,8 @@ import { TouchableOpacity } from 'react-native'
 import ButtonMailboxI18nKeys from './i18n/keys'
 import i18next from 'i18next'
 import localeES from './i18n/es'
-import { checkMailbox } from '../../services/Lacchain/checkMailbox'
+import { checkMailbox } from '../../services/lacchain/checkMailbox'
+import { ButtonContainer, LoadingContainer } from './styles'
 
 interface Props {
   onPress?: () => void
@@ -51,13 +52,13 @@ const ButtonMailbox = (props: Props) => {
     } finally {
       const content = t(ButtonMailboxI18nKeys.BUTTON_MAILBOX_SUCCESS)
       showMessage({ content, type: 'success' })
-      navigation.navigate('Root')
+      navigation.navigate('Root', { screen: 'Credentials' })
       setIsLoadingBtn(false)
     }
   }
 
   return (
-    <>
+    <ButtonContainer >
       {
         !isLoadingBtn ? (
           <TouchableOpacity onPress={handleMailboxPress}>
@@ -65,11 +66,14 @@ const ButtonMailbox = (props: Props) => {
               {t(ButtonMailboxI18nKeys.BUTTON_MAILBOX)}
             </DescriptionText>
           </TouchableOpacity>
+
         ) : (
-          <Loading />
+          <LoadingContainer>
+            <Loading />
+          </LoadingContainer>
         )
       }
-    </>
+    </ButtonContainer>
   )
 }
 

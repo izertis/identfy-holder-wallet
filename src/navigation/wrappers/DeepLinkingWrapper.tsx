@@ -1,14 +1,14 @@
 import { useEffect } from 'react'
 import useDeepLinking from '../../hooks/useDeepLinking'
-import { useEbsi } from '../../services/Ebsi'
 import { storeCallbackFunction } from '../../utils/storeCallback'
+import { useOpenId } from '../../services/open-id'
 
 export const DeepLinkingWrapper =
   (Component: (props: any) => JSX.Element) => (props: any) => {
     const callbackId = 'SameDeviceCredentialCallback'
-    const { handleEbsiQR } = useEbsi()
+    const { handleCredentialOffer } = useOpenId()
     const onHandleCallback = async (encodedOpenidUri: string) => {
-      await handleEbsiQR(encodedOpenidUri)
+      await handleCredentialOffer(encodedOpenidUri)
     }
     useEffect(() => {
       storeCallbackFunction(callbackId, onHandleCallback)
@@ -19,7 +19,7 @@ export const DeepLinkingWrapper =
         id: callbackId,
         params: [encodedOpenidUri]
       }
-      // if Lockscreen is not active then must indicate set here: navigation.replace('Login) so deep link works
+      // if Lockscreen is not active then must indicate here: navigation.replace('Login) so deep link works
 
       props.navigation.setParams({
         callback,

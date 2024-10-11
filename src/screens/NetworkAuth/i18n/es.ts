@@ -14,8 +14,8 @@ const localeES = {
 	LOADING: 'Creando DID...',
 	BUTTON: 'Crear DID',
 	CONTINUE: 'Continuar',
-	SUCCESS: 'Identidad digital creada!',
-	ERROR: 'A ocurrido un error creando el DID',
+	SUCCESS: '¡Identidad digital creada!',
+	ERROR: 'Ha ocurrido un error creando el DID',
 }
 
 export default localeES

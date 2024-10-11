@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View } from '../../Themed'
 import RequestPresentationModalStyled from '../styles'
 import ItemCredential from './ItemCredential'
 import HeaderCredential from './HeaderCredential'
-import { CredentialData } from '../../../types/keychain'
+import { CredentialData } from '../../../services/open-id/types'
 
 interface Props {
   credentials: CredentialData[]
@@ -11,11 +11,11 @@ interface Props {
 }
 const CredentialList = (props: Props) => {
   const [credentialsSelected, setCredentialsSelected] = useState<string[]>([])
+
   useEffect(() => {
     props.onChangeSelectedCredentials(credentialsSelected)
   }, [credentialsSelected])
-  const isAllSelected: boolean =
-    credentialsSelected?.length === props.credentials?.length
+
 
   const onHandlePressHeaderCheckBox = () => {
     setCredentialsSelected(
@@ -32,6 +32,9 @@ const CredentialList = (props: Props) => {
         : [...credentialsSelected, credential.id]
     )
   }
+
+  const isAllSelected: boolean = credentialsSelected?.length === props.credentials?.length
+
   return (
     <View>
       <HeaderCredential
@@ -39,21 +42,21 @@ const CredentialList = (props: Props) => {
         onPressCheckBox={onHandlePressHeaderCheckBox}
       />
       <RequestPresentationModalStyled.ScrollContainer>
-        {props.credentials.map((credential: CredentialData, index) => {
-          const isCredentialSelected = !!credentialsSelected.find(
-            (id) => id === credential.id
-          )
-          return (
-            <ItemCredential
-              key={`ScrollContainer-${index}`}
-              credential={credential}
-              onPressCheckbox={() =>
-                onHandlePressItemCheckBox(credential, isCredentialSelected)
-              }
-              isChecked={isCredentialSelected}
-            />
-          )
-        })}
+        {props.credentials
+          .map((credential: CredentialData, index) => {
+            const isCredentialSelected = !!credentialsSelected.find(id => id === credential.id)
+
+            return (
+              <ItemCredential
+                key={`ScrollContainer-${index}`}
+                credential={credential}
+                onPressCheckbox={() => {
+                  onHandlePressItemCheckBox(credential, isCredentialSelected)
+                }}
+                isChecked={isCredentialSelected}
+              />
+            )
+          })}
       </RequestPresentationModalStyled.ScrollContainer>
     </View>
   )

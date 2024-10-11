@@ -1,3 +1,4 @@
+import 'react-native-get-random-values'
 import '@ethersproject/shims'
 import elliptic from 'elliptic'
 import ethutils from 'ethereumjs-util'

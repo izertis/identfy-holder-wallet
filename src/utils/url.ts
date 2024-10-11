@@ -53,7 +53,7 @@ export const extractCredentialOfferUri = (data: string) => {
 	return credentialOfferUri
 }
 
-export const getAuthorizationResponseParams = (url: string): { code: string; state: string } => {
+export const processAuthorizationResponse = (url: string): { code: string; state: string } => {
 	const params = {
 		code: '',
 		state: '',

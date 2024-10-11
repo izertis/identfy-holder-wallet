@@ -8,3 +8,5 @@ export const lacchainDIDBasicConfiguration = {
 
 export const mailboxDID =
 	process.env.LAC_MAILBOX_DID || 'did:lac:openprotest:0xf33bc23691245c2d5de99d7d45e9fdd113495870'
+
+export const LACCHAIN_DID_METHOD = 'lac'

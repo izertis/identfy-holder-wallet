@@ -3,7 +3,6 @@ export const SCREEN = {
 	OnBoarding: 'OnBoarding',
 	Register: 'Register',
 	Login: 'Login',
-	Recovery: 'Recovery',
 	SecurityPhrase: 'SecurityPhrase',
 	SecurityPhraseConfirm: 'SecurityPhraseConfirm',
 	DerivationPath: 'DerivationPath',
@@ -13,5 +12,4 @@ export const SCREEN = {
 	Credentials: 'Credentials',
 	Presentations: 'Presentations',
 	Historical: 'Historical',
-	Help: 'Help',
 } as const

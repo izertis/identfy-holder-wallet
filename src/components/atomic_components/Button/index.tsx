@@ -17,10 +17,11 @@ const ButtonStyled = styled(BaseButton).attrs((props) => ({
   labelStyle: {
     letterSpacing: 0.57,
     color: getColorByBackground(
-      ColorKeys.text,
+      ColorKeys.buttonText,
       getBackgroundColor(props.disabled)
     ),
     fontFamily: FONT_FAMILY.PRINCIPAL,
+    fontWeight: 'bold',
   },
   contentStyle: {
     height: 39,

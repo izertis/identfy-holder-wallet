@@ -1,30 +1,20 @@
+import 'react-native-get-random-values'
 import '@ethersproject/shims'
 import { BNInput, ec as EC } from 'elliptic'
-import { base64url } from 'jose'
 import { sha256 } from 'ethereumjs-util'
 import { bufferFromUtf8 } from './string'
 import { utils as ethersUtils } from 'ethers'
-import ebsiI18nKeys from '../services/Ebsi/i18n/keys'
+import openIdI18nKeys from '../services/i18n/keys'
+import { base64urlDecode, base64urlEncode, selectCurve } from './crypto'
+import { getAlastriaSignerConfig } from '../services/alastria/signer'
+import { Resolver } from 'did-resolver'
+import { getResolver as getEpicResolver } from '../services/alastria/did-resolver/resolver'
+import { getResolver as getEbsiResolver } from '@cef-ebsi/key-did-resolver'
+import jwt from 'jsonwebtoken'
 
 type SignConfig = {
 	publicKey?: string
 	privateKey?: string
-}
-
-export function base64urlEncode(str: string | number[] | Uint8Array | Buffer) {
-	let data: string | Uint8Array = str as any
-	if (typeof str === typeof []) {
-		data = Uint8Array.from(str as number[])
-	}
-	return base64url.encode(data)
-}
-
-export function base64urlDecode(derSign: string | number[] | Uint8Array) {
-	let data: string | Uint8Array = derSign as any
-	if (typeof derSign === typeof []) {
-		data = Uint8Array.from(derSign as number[])
-	}
-	return base64url.decode(data)
 }
 
 const hashDigestSha256 = (token: string) => {
@@ -33,8 +23,13 @@ const hashDigestSha256 = (token: string) => {
 	return sha256Hash
 }
 
-const signWithP256 = async (dataBuffer: BNInput, { privateKey, publicKey }: SignConfig = {}) => {
-	var ec = new EC('p256')
+const signatureCurve = async (
+	dataBuffer: BNInput,
+	alg?: 'ES256' | 'ES256K',
+	{ privateKey, publicKey }: SignConfig = {}
+) => {
+	const curveName = selectCurve(alg)
+	const ec = new EC(curveName)
 	let key
 	if (privateKey) {
 		key = ec.keyFromPrivate(privateKey.substring(2) as string)
@@ -43,67 +38,116 @@ const signWithP256 = async (dataBuffer: BNInput, { privateKey, publicKey }: Sign
 	} else {
 		key = ec.genKeyPair()
 	}
-	// Generate keys
-	// Sign the message's hash (input must be an array, or a hex-string)
-	var signature = key.sign(dataBuffer)
 
-	// Random invalid hex string error posibly here
-	const signatureR = signature.r.toString(16)
-	const signatureS = signature.s.toString(16)
-	const signUnencoded = signatureR.concat(signatureS)
-	const sign = base64urlEncode(Buffer.from(signUnencoded, 'hex'))
+	const signature = key.sign(dataBuffer)
+	const signUnencoded = Buffer.concat([
+		signature.r.toArrayLike(Buffer, 'be', 32),
+		signature.s.toArrayLike(Buffer, 'be', 32),
+	])
+	const sign = base64urlEncode(signUnencoded)
+
 	return sign
 }
 
-const sign = async (token: any, config?: SignConfig) => {
+const sign = async (token: any, alg?: 'ES256' | 'ES256K', config?: SignConfig) => {
 	const hashDigest = hashDigestSha256(token)
-	const sign = await signWithP256(hashDigest, config)
+	const sign = await signatureCurve(hashDigest, alg, config)
 	return sign
 }
 
 export type HeaderJWT = {
-	alg: 'ES256' | 'RS256'
-	typ: string
+	alg?: 'ES256' | 'ES256K'
+	typ: 'JWT' | string
 	kid?: string
 }
 
 export const signJWT = async ({
 	header = {
-		alg: 'ES256',
 		typ: 'JWT',
 	},
+	trustedFramework,
 	payload,
-	privateKey,
+	privateKey: providedPrivateKey,
 }: {
 	header?: HeaderJWT
+	trustedFramework?: string
 	payload: any
 	privateKey: string | null
 }) => {
-	if (!privateKey) {
-		throw ebsiI18nKeys.ERROR_NO_PRIVATE_KEY
+	if (!providedPrivateKey) {
+		throw openIdI18nKeys.ERROR_NO_PRIVATE_KEY
 	}
+	let privateKey
+
+	// TODO: Refactor | with EPIC flow, update alg and claims adding didUrl and privateKey with ddpp applied
+	const epicResolver = new Resolver({ ...getEpicResolver() })
+	const ebsiResolver = new Resolver({ ...getEbsiResolver() })
+
+	if (trustedFramework === 'epic') {
+		const resolvedEpicDid = (await epicResolver.resolve(header.kid!)).didDocument?.verificationMethod![0].id
+		const alastriaConfig = await getAlastriaSignerConfig(providedPrivateKey, resolvedEpicDid)
+
+		header.alg = 'ES256K'
+		header.kid = alastriaConfig.composedDid
+		payload.iss = alastriaConfig.composedDid
+		payload.sub = alastriaConfig.composedDid
+
+		if (payload.vp) {
+			payload.vp.holder = alastriaConfig.composedDid
+		}
+
+		privateKey = alastriaConfig.secret
+	} else if (trustedFramework === 'ebsi') {
+		header.alg = 'ES256'
+		privateKey = providedPrivateKey
+		if (header.kid) {
+			header.kid = (await ebsiResolver.resolve(header.kid)).didDocument?.verificationMethod![0].id
+		}
+		// TODO: Get Lacchain's trusted framework for PuntaCana match
+	} else {
+		header.alg = 'ES256'
+		privateKey = providedPrivateKey
+		header.kid
+	}
+
 	try {
 		const segments = []
+		const alg = header.alg
 
 		segments.push(base64urlEncode(bufferFromUtf8(JSON.stringify(header))))
 		segments.push(base64urlEncode(bufferFromUtf8(JSON.stringify(payload))))
-		segments.push(await sign(segments.join('.'), { privateKey }))
+		segments.push(await sign(segments.join('.'), alg, { privateKey }))
 
 		return segments.join('.')
 	} catch (error) {
-		console.error('Error signing JWT - jwt utils:', error)
+		console.error('Error signing JWT -', error)
 		throw error
 	}
 }
 
 export const verifyJwt = async (token: any, key?: any) => {
 	const [header, payload, signature] = token.split('.')
-	const tokenUnsigned = `${header}.${payload}`
 
+	const tokenUnsigned = `${header}.${payload}`
 	const signPayload = sha256(Buffer.from(tokenUnsigned, 'utf-8'))
+
 	const base64Signature = base64urlDecode(signature)
 	const r = base64Signature.slice(0, 32)
 	const s = base64Signature.slice(32)
-	var ec = new EC('p256')
+
+	const decodedHeader = JSON.parse(Buffer.from(header, 'base64').toString('utf-8'))
+	const alg = decodedHeader.alg
+	const curve = selectCurve(alg)
+	var ec = new EC(curve)
+
 	return ec.verify(signPayload, { r, s }, key)
+}
+
+export const isJWT = (token: string): boolean => {
+	try {
+		const decoded = jwt.decode(token, { complete: true })
+		return !!decoded
+	} catch (error) {
+		return false
+	}
 }

@@ -7,32 +7,57 @@ import { useState } from 'react'
 import { getTimeFormat } from '../../../../utils/dates'
 import { getThemeColor, ColorKeys } from '../../../../constants/Colors'
 import PresentationStyled from '../../styles'
+import { filterCredentialType, getTrustedFrameworkFromDid } from '../../../../services/open-id/utils'
+import { Credential, PresentationData } from '../../../../services/open-id/types'
+import jwt from 'jsonwebtoken'
+import CredentialAccordionDetail from '../../../../components/CredentialAccordionDetail'
 
 interface Props {
-  itemId: string,
+  itemTimestamp: Date,
   date?: string
-  title?: string
+  id?: string
   issuer?: string
   key?: string
   deleteMode: boolean
-  selectedItems: any[]
-  setSelectedItems: (items: string[]) => void
+  selectedItems: Date[]
+  setSelectedItems: (items: Date[]) => void
+  presentation: PresentationData | string | unknown
 }
 
 const PresentationDetail = (props: Props) => {
   const { t } = useTranslation(SCREEN.Presentations)
   const [expanded, setExpanded] = useState(false)
-  const { title, itemId, deleteMode, selectedItems, setSelectedItems, date } = props
+  const { itemTimestamp, deleteMode, selectedItems, setSelectedItems, date } = props
 
   const handlePress = () => setExpanded(!expanded)
 
-  const handleCheckboxToggle = (itemId: string) => {
-    if (selectedItems?.includes(itemId)) {
-      setSelectedItems(selectedItems.filter((id: string) => id !== itemId))
+  const handleCheckboxToggle = (itemTimestamp: Date) => {
+    if (selectedItems?.includes(itemTimestamp)) {
+      setSelectedItems(selectedItems.filter((timestamp) => timestamp !== itemTimestamp))
     } else {
-      setSelectedItems([...selectedItems, itemId])
+      setSelectedItems([...selectedItems, itemTimestamp])
     }
   }
+  let presentation
+  if (typeof props.presentation === 'string') {
+    if (props.presentation.startsWith('ey')) {
+      presentation = jwt.decode(props.presentation)
+    } else {
+      try {
+        presentation = JSON.parse(props.presentation)
+      } catch (error) {
+        console.error('Error parsing credential as JSON:', error)
+      }
+    }
+  } else {
+    presentation = props.presentation
+  }
+
+  const parsedPresentation: Credential['payload'] = presentation
+  const { type, issuer } = parsedPresentation?.vc ?? parsedPresentation.data ?? {}
+
+  let trustedFramework = getTrustedFrameworkFromDid(issuer)
+  if (trustedFramework === 'epic') trustedFramework = 'Alastria epic'
 
   return (
 
@@ -40,43 +65,79 @@ const PresentationDetail = (props: Props) => {
       {deleteMode ? (
         <PresentationStyled.CheckBoxView >
           <Checkbox.Android
-            status={selectedItems.includes(itemId) ? 'checked' : 'unchecked'}
-            onPress={() => handleCheckboxToggle(itemId)}
+            status={selectedItems.includes(itemTimestamp) ? 'checked' : 'unchecked'}
+            onPress={() => handleCheckboxToggle(itemTimestamp)}
             color={getThemeColor(ColorKeys.secondary)}
           />
           <List.Section key={props.key} style={{ width: '91%' }}>
-            <List.Accordion
-              title={<DescriptionText bold>{props.issuer}</DescriptionText>}
+            <PresentationStyled.StyledAccordion
+              title={<DescriptionText
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                <PresentationStyled.LabelText>
+                  {t(PresentationsI18nKeys.CREDENTIAL)}
+                </PresentationStyled.LabelText>
+                {filterCredentialType(type!)}
+              </DescriptionText>}
               titleStyle={{ fontWeight: '800' }}
-              description={<DescriptionText>{getTimeFormat(props.date!)}</DescriptionText>}
+              description={
+                <DescriptionText>
+                  <PresentationStyled.LabelText>
+                    {t(PresentationsI18nKeys.PRESENTED)}
+                  </PresentationStyled.LabelText> {getTimeFormat(itemTimestamp.toString())}
+                </DescriptionText>
+              }
               descriptionStyle={{ paddingTop: 3 }}
               expanded={expanded}
-              style={{ paddingVertical: -10, backgroundColor: getThemeColor(ColorKeys.background) }}
               onPress={handlePress}>
+
               <List.Item
                 titleStyle={{ flexDirection: 'row', alignItems: 'center' }}
                 title={<DescriptionText>{t(PresentationsI18nKeys.INFORMATION)}:</DescriptionText>}
-                description={<DescriptionText>{props.title}</DescriptionText>}
               />
-            </List.Accordion>
+              <CredentialAccordionDetail
+                id={props.id}
+                type={filterCredentialType(type!)}
+                trustedFramework={trustedFramework}
+                status={undefined} />
+            </PresentationStyled.StyledAccordion>
           </List.Section>
         </PresentationStyled.CheckBoxView>
       ) : (
         <List.Section key={props.key}>
-          <List.Accordion
-            title={<DescriptionText bold>{props.issuer}</DescriptionText>}
+          <PresentationStyled.StyledAccordion
+            title={<DescriptionText
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              <PresentationStyled.LabelText>
+                {t(PresentationsI18nKeys.CREDENTIAL)}
+              </PresentationStyled.LabelText>
+              {filterCredentialType(type!)}
+            </DescriptionText>}
             titleStyle={{ fontWeight: '800' }}
-            description={<DescriptionText>{getTimeFormat(props.date!)}</DescriptionText>}
+            description={
+              <DescriptionText>
+                <PresentationStyled.LabelText>
+                  {t(PresentationsI18nKeys.PRESENTED)}
+                </PresentationStyled.LabelText> {getTimeFormat(itemTimestamp.toString())}
+              </DescriptionText>
+            }
             descriptionStyle={{ paddingTop: 3 }}
             expanded={expanded}
-            style={{ paddingVertical: -10, backgroundColor: getThemeColor(ColorKeys.background) }}
             onPress={handlePress}>
+
             <List.Item
               titleStyle={{ flexDirection: 'row', alignItems: 'center' }}
               title={<DescriptionText>{t(PresentationsI18nKeys.INFORMATION)}:</DescriptionText>}
-              description={<DescriptionText>{props.title}</DescriptionText>}
             />
-          </List.Accordion>
+            <CredentialAccordionDetail
+              id={props.id}
+              type={filterCredentialType(type!)}
+              trustedFramework={trustedFramework}
+              status={undefined} />
+          </PresentationStyled.StyledAccordion>
         </List.Section>
       )}
     </PresentationStyled.PresentationDetailContainer>

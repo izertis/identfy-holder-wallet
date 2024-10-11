@@ -12,6 +12,7 @@ import TermsModal from '../../components/TermsModal'
 import useModal from '../../hooks/useModal'
 import { StatusBar } from 'expo-status-bar'
 import { getThemeColor, ColorKeys } from '../../constants/Colors'
+import { Keyboard } from 'react-native'
 
 
 const Register = ({ navigation }: RootStackScreenProps<'Register'>) => {
@@ -30,6 +31,7 @@ const Register = ({ navigation }: RootStackScreenProps<'Register'>) => {
 	}, [firstPin, secondPin])
 
 	const createWallet = async () => {
+		Keyboard.dismiss()
 		try {
 			const data = await createEncryptedWallet(firstPin)
 			await LocalStorageService.storeBool(STORAGE_KEYS.IS_WALLET_CREATED, true)
@@ -88,6 +90,7 @@ const Register = ({ navigation }: RootStackScreenProps<'Register'>) => {
 
 			<RegisterStyles.InputsContainer>
 				<RegisterStyles.InputStyled
+					disabled={isLoading}
 					testID={testID.FIRST_PIN_INPUT}
 					value={firstPin}
 					keyboardType='decimal-pad'
@@ -99,6 +102,7 @@ const Register = ({ navigation }: RootStackScreenProps<'Register'>) => {
 					returnKeyType={'next'}
 				/>
 				<RegisterStyles.InputStyled
+					disabled={isLoading}
 					testID={testID.SECOND_PIN_INPUT}
 					value={secondPin}
 					keyboardType='decimal-pad'

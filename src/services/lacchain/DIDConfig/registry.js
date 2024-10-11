@@ -1,3 +1,4 @@
+import 'react-native-get-random-values'
 import "@ethersproject/shims"
 import * as ethers from 'ethers';
 import lacchain from "@lacchain/gas-model-provider";

@@ -7,19 +7,19 @@ import qrReaderI18nKeys from './i18n/keys'
 import { NavigationInjectedProps } from 'react-navigation'
 import QrReaderStyled from './styles'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import { useEbsi } from '../../services/Ebsi'
 import { ActivityIndicator } from 'react-native-paper'
 import { ColorKeys, getThemeColor } from '../../constants/Colors'
-import { useMatchingID } from '../../services/Lacchain/didMatch'
+import { useMatchingID } from '../../services/lacchain/didMatch'
 import { MessageContext } from '../../context/UserMessage.context'
 import { useNavigation } from '@react-navigation/native'
+import { useOpenId } from '../../services/open-id'
 
 interface Props extends NavigationInjectedProps {
   issuer?: string
 }
 
 const QrReader = (props: Props) => {
-  const { handleEbsiQR } = useEbsi()
+  const { handleCredentialOffer } = useOpenId()
   const { handleMatchingID } = useMatchingID()
   const { t } = useTranslation(SCREEN.QrReader)
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -56,21 +56,24 @@ const QrReader = (props: Props) => {
       setIsReading(true)
       setIsLoading(true)
       try {
-
-        if (data.startsWith("openid-credential-offer")) {
-
-          await handleEbsiQR(data)
+        if (data.startsWith("openid")) {
+          await handleCredentialOffer(data)
 
         } else if (data.startsWith("matching-id")) {
-
           await handleMatchingID(data)
           showMessage({ content: t?.(qrReaderI18nKeys.SUCCESS_ASOCIATE_IDENTIFIER), type: "success" })
 
         } else {
-          showMessage({ content: t?.(qrReaderI18nKeys.ERROR), type: "error" })
+          try {
+            // Data could also be a json object (openId flow)
+            const parsedData = JSON.parse(data)
+            await handleCredentialOffer(JSON.stringify(parsedData))
+
+          } catch (error) {
+            showMessage({ content: t?.(qrReaderI18nKeys.ERROR), type: "error" })
+          }
         }
-      } catch (error) {
-        // @ts-ignore
+      } catch (error: any) {
         showMessage({ content: error.message, type: "error" })
 
       } finally {
@@ -78,7 +81,7 @@ const QrReader = (props: Props) => {
         setIsLoading(false)
         setTimeout(() => {
           if (navigation.canGoBack()) navigation.goBack()
-        }, 800)
+        }, 3000)
       }
     }
   }

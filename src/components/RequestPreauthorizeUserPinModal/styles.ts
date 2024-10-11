@@ -38,11 +38,6 @@ const RequestPreauthorizeUserPinModalStyled = {
 			backgroundColor: getThemeColor(ColorKeys.primary),
 		},
 	})``,
-	ButtonText: safeStyledText(DescriptionText)`
-    font-weight: bold;
-    z-index: 0;
-  `,
-
 	ModalText: safeStyledText(DescriptionText)``,
 
 	ModalBoldText: safeStyledText(DescriptionText)`

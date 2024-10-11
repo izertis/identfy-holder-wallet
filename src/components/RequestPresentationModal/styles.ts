@@ -1,4 +1,4 @@
-import styled from 'styled-components/native'
+import styled, { css } from 'styled-components/native'
 import { ColorKeys, getThemeColor } from '../../constants/Colors'
 import ButtonStyled from '../atomic_components/Button'
 import { DescriptionText } from '../atomic_components/Text/variants'
@@ -11,24 +11,18 @@ const RequestPresentationModalStyled = {
 		background-color: ${getThemeColor(ColorKeys.background)};
 	`,
 	CredentialContainer: styled.View`
-		margin-top: 50px;
+		margin-top: 0px;
 		margin-bottom: 12px;
 	`,
 	ModalContent: styled.View`
-		margin-top: 30px;
 		padding: 20px;
 		background-color: ${getThemeColor(ColorKeys.background)};
-	`,
-	ModalTextContent: styled.View`
-		flex-direction: row;
+		height: 550px;
 	`,
 	ButtonContainer: styled.View`
 		flex-direction: row;
 		justify-content: center;
 		margin-bottom: 40px;
-	`,
-	DropDownPickerContainer: styled.View`
-		margin-top: 30px;
 	`,
 	Button: styled(ButtonStyled).attrs({
 		contentStyle: {
@@ -37,16 +31,8 @@ const RequestPresentationModalStyled = {
 			backgroundColor: getThemeColor(ColorKeys.primary),
 		},
 	})``,
-	ButtonText: safeStyledText(DescriptionText)`
-    font-weight: bold;
-    z-index: 0;
-  `,
+	ModalText: safeStyledText(DescriptionText)`margin-bottom: 20px; margin-top: 0px;`,
 
-	ModalText: safeStyledText(DescriptionText)``,
-
-	ModalBoldText: safeStyledText(DescriptionText)`
-    font-weight: bold;
-  `,
 	Container: styled.View`
 		background-color: transparent;
 	`,
@@ -58,7 +44,7 @@ const RequestPresentationModalStyled = {
 		border-bottom-width: 1px;
 	`,
 	ScrollContainer: styled.ScrollView`
-		height: 350px;
+		height: 340px;
 	`,
 	ItemContainer: styled.View`
 		width: 100%;
@@ -70,6 +56,7 @@ const RequestPresentationModalStyled = {
 	`,
 	ItemTextDate: safeStyledText(DescriptionText)`
     font-size: 12px;
+		${(props: any) => `color: ${props.color};`}
   `,
 	ItemTextIssuer: safeStyledText(DescriptionText)`
     font-size: 15px;
@@ -79,6 +66,7 @@ const RequestPresentationModalStyled = {
 	ItemTextCredentialName: safeStyledText(DescriptionText)`
     font-size: 12px;
     letter-spacing: 0.4px;
+		width: 290px
   `,
 }
 

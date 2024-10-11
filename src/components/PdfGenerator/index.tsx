@@ -23,7 +23,7 @@ const PDFGenerator: React.FC<PDFGeneratorProps> = ({ data }) => {
 
   const generatePDF = async () => {
     try {
-      const formattedData = JSON.stringify(JSON.parse(data), null, 2)
+      const formattedData = JSON.stringify(data, null, 2)
       const htmlContent = `
       <html>
       <head>

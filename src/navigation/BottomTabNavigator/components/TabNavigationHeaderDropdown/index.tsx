@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { SCREEN } from "../../../../constants/screens"
-import { navigate } from "../../../RootNavigation"
 import i18next from "../../../../../i18n.config"
 import localeES from "./i18n/es"
 import BottonTabNavigationHeaderI18nKeys from "./i18n/keys"
@@ -12,6 +11,9 @@ import { ColorKeys, getThemeColor } from "../../../../constants/Colors"
 import TermsModal from "../../../../components/TermsModal"
 import es from "./i18n/es"
 import useModal from "../../../../hooks/useModal"
+import ConfirmationDialog from "../../../../components/ConfirmationDialog"
+import { deleteAllKeychainData } from "../../../../utils/keychain"
+import LocalStorageService from "../../../../services/LocalStorage.service"
 
 const bundle = "TabNavigatorHeaderDropDown"
 
@@ -22,26 +24,28 @@ const TabNavigatorHeaderDropDown = () => {
   const navigation = useNavigation()
   const [visible, setVisible] = useState<boolean>(false)
   const { showModal } = useModal()
+  const [isDialogVisible, setDialogVisible] = useState(false)
 
   const openMenu = () => setVisible(true)
   const closeMenu = () => setVisible(false)
 
   const menuItems = [
-    { title: SCREEN.DidList, i18nKey: BottonTabNavigationHeaderI18nKeys.DidManagement },
-    { title: SCREEN.Help, i18nKey: BottonTabNavigationHeaderI18nKeys.Help },
-    { title: 'TermsAndConditions', i18nKey: BottonTabNavigationHeaderI18nKeys.TermsAndConditions },
-    { title: SCREEN.Login, i18nKey: BottonTabNavigationHeaderI18nKeys.Login },
+    { title: SCREEN.DidList, i18nKey: BottonTabNavigationHeaderI18nKeys.DID_MANAGEMENT },
+    { title: 'TermsAndConditions', i18nKey: BottonTabNavigationHeaderI18nKeys.TERMS_AND_CONDITIONS },
+    { title: SCREEN.Login, i18nKey: BottonTabNavigationHeaderI18nKeys.BLOCK_SESION },
+    { title: SCREEN.OnBoarding, i18nKey: BottonTabNavigationHeaderI18nKeys.REMOVE_USER_KEYS },
   ]
 
   const navigateAndCloseMenu = (screenName: string) => {
-    if (screenName === SCREEN.Login) {
+    if (screenName === SCREEN.Login || screenName === SCREEN.OnBoarding) {
       const resetAction = CommonActions.reset({
         index: 0,
         routes: [{ name: screenName }],
       })
       navigation.dispatch(resetAction)
     } else {
-      navigate(screenName)
+      //@ts-ignore
+      navigation.navigate(screenName)
     }
     setVisible(false)
   }
@@ -74,11 +78,15 @@ const TabNavigatorHeaderDropDown = () => {
                 showModal?.({
                   Component: TermsModal,
                   modalProps: {
-                    buttonText: t(es.ModalButton),
+                    buttonText: t(es.BUTTON_CLOSE),
                   },
                   modalContainerStyle: { paddingBottom: 40 },
                 })
                 setVisible(false)
+
+              } else if (item.title === SCREEN.OnBoarding) {
+                setVisible(false)
+                setDialogVisible(true)
               } else {
                 navigateAndCloseMenu(item.title)
               }
@@ -87,6 +95,20 @@ const TabNavigatorHeaderDropDown = () => {
           />
         ))}
       </Menu>
+      <ConfirmationDialog
+        visible={isDialogVisible}
+        titleLabel={t(BottonTabNavigationHeaderI18nKeys.DIALOG_TITLE)!}
+        message={t(BottonTabNavigationHeaderI18nKeys.DIALOG_DESCRIPTION)!}
+        onPress={async () => {
+          setDialogVisible(false)
+          await deleteAllKeychainData()
+          await LocalStorageService.clearAll()
+          navigateAndCloseMenu(SCREEN.OnBoarding)
+        }}
+        onCancel={() => {
+          setDialogVisible(false)
+        }}
+      />
     </DropdownView>
   )
 }
