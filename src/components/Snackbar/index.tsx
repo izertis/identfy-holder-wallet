@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import Colors, { ColorKeys, getThemeColor } from '../../constants/Colors'
-import { THREE_SECONDS_SNACK_DURATION } from '../../constants/Quantities'
+import { FIVE_SECONDS_SNACK_DURATION } from '../../constants/Quantities'
 import { MessageContext } from '../../context/UserMessage.context'
 import { StyledSnackbar } from './styles'
 
@@ -26,7 +26,7 @@ export default function SnackbarMessage(): JSX.Element {
     <StyledSnackbar
       wrapperStyle={{ bottom: 100, zIndex: 10000 }}
       visible={messageInfo.isVisible && messageInfo.content}
-      duration={THREE_SECONDS_SNACK_DURATION}
+      duration={FIVE_SECONDS_SNACK_DURATION}
       onDismiss={() => {
         setMessageInfo({ content: '', type: '', isVisible: false })
       }}

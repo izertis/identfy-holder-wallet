@@ -92,3 +92,4 @@ async function checkStatusList(credentialStatus: StatusListEntry2021, issuer: st
 		return { valid: false }
 	}
 	return { valid: true }
+}
