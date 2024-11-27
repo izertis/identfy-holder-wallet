@@ -322,25 +322,52 @@ class OpenId {
 
 		const uri = presentationOffer.redirect_uri
 
-		const response = await axios.post(uri, data, {
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			maxRedirects: 0,
-		})
+		try {
+			const response = await axios.post(uri, data, {
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				maxRedirects: 0,
+			})
 
-		if (response.request.responseURL.includes('error')) {
-			const presentationOfferObj: AuthorizationRequestResponse = convertUriToObject(
-				response.request.responseURL!
-			) as any
-			const { error, error_description } = presentationOfferObj || {}
+			if (response.status === 200) {
+				return true
+			}
 
-			if (error || error_description) {
-				throw new Error(error_description?.split('+').join(' ') ?? 'Unknown error occurred')
+			if (response.status === 302) {
+				const redirectLocation = response.headers['location']
+				// Next axios request should confirm success with 200
+				return axios
+					.get(redirectLocation)
+					.then(() => true)
+					.catch((error) => {
+						console.info('Error al llamar al resultado del redirect:', error)
+						return false
+					})
+			}
+		} catch (error: any) {
+			if (error.response) {
+				const headers = error.response.headers
+
+				if (headers.location) {
+					const locationData = headers.location
+
+					const errorMatch = locationData.match(/'error':\s*'([^']+)'/)
+					let errorDescriptionMatch = locationData.match(/'error_description':\s*'([^']+)'/)
+
+					if (errorMatch && errorDescriptionMatch) {
+						if (errorDescriptionMatch[1] === 'is revoked') {
+							errorDescriptionMatch[1] = 'Credencial revocada'
+						}
+						throw new Error(`Error en la presentación de la credencial: ${errorDescriptionMatch[1]}`)
+					}
+				}
+			} else {
+				throw new Error(`Error: ${(error as Error).message}`)
 			}
 		}
 
-		return true
+		return false
 	}
 
 	async sendTokenRequest(params: TokenRequest, tokenEndpoint: string) {
